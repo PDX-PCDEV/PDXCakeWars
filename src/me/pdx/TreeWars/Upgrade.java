@@ -27,23 +27,25 @@ public class Upgrade implements Listener{
     Block[] blockList;
     @EventHandler
     public void OnPlayerInteract (PlayerInteractEvent e) {
-        if (e.getClickedBlock().getType() == Material.WALL_SIGN) {
-            int index = 0;
-            for (int r = 0; r < blockList.length; r++) {
-                if (e.getClickedBlock().equals(blockList[r])) {
-                    index = r;
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (e.getClickedBlock().getType() == Material.WALL_SIGN) {
+                int index = 0;
+                for (int r = 0; r < blockList.length; r++) {
+                    if (e.getClickedBlock().equals(blockList[r])) {
+                        index = r;
+                    }
                 }
-            }
-            ItemMeta im = is.getItemMeta();
-            im.setDisplayName("Generator:" + index);
-            is.setItemMeta(im);
-            inv.setItem(4, is);
+                ItemMeta im = is.getItemMeta();
+                im.setDisplayName("Generator:" + index);
+                is.setItemMeta(im);
+                inv.setItem(4, is);
 
-            Player player = e.getPlayer();
-            if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                Inventory clone = inv;
+                Player player = e.getPlayer();
+                if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    Inventory clone = inv;
 
-                player.openInventory(clone);
+                    player.openInventory(clone);
+                }
             }
         }
     }
@@ -62,12 +64,12 @@ public class Upgrade implements Listener{
                     return;
                 }
 
-                if (sign.getLine(0) == "Iron") {
+                if (sign.getLine(0).equals("Iron")) {
                     player.sendMessage("d");
                     if (level == 1) {
                         if(!checkCost(Material.IRON_INGOT, 10, player)) {return;}
                     }
-                } else if (sign.getLine(0) == "Gold") {
+                } else if (sign.getLine(0).equals("Gold")) {
                     if (level == 1) {
                         if(!checkCost(Material.IRON_INGOT, 30, player)) {return;}
                     }
@@ -90,13 +92,13 @@ public class Upgrade implements Listener{
     public boolean checkCost (Material mat, int number, HumanEntity player) {
         for (int fooey = 0; fooey < player.getInventory().getContents().length; fooey++) {
             if (player.getInventory().getContents()[fooey] != null) {
-                if (player.getInventory().getContents()[fooey].getType() == mat && player.getInventory().getContents()[fooey].getAmount() > number) {
+                if (player.getInventory().getContents()[fooey].getType() == mat && player.getInventory().getContents()[fooey].getAmount() >= number) {
                     player.getInventory().removeItem(new ItemStack(Material.IRON_INGOT, 10));
                     return true;
                 }
             }
         }
-        player.sendMessage(ChatColor.RED + "You are " + number + " " + mat.name() + " short!");
+        player.sendMessage(ChatColor.RED + "You are " + number + " " + mat.name().toLowerCase() + "s short!");
         return false;
     }
 }

@@ -56,6 +56,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new CakeHandler(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new Death(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new Traps(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(new Projectiles(),this);
         getLogger().info ("Treewars has been enabled.");
 
         for (int t = 0; t < cakes.length; t++) {
